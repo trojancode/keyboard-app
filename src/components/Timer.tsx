@@ -11,18 +11,18 @@ const Timer = () => {
     const [time, isActive, startTimer, stop, restartTimer, addPenalty] = useTimer();
     useEffect(() => {
         //when ADD_PENALTY is dispatched 
-        if (gameContext.state.status == STARTED && gameContext.state.action == ADD_PENALTY) {
+        if (gameContext.state.status === STARTED && gameContext.state.action === ADD_PENALTY) {
             if (!isActive) startTimer()
             addPenalty()
             return;
         }
         //When Game Starts
-        if (gameContext.state.status == STARTED && !isActive) {
+        if (gameContext.state.status === STARTED && !isActive) {
             startTimer()
             return;
         }
         //When Game is running and resets
-        if (gameContext.state.action == RESET_GAME && isActive) {
+        if (gameContext.state.action === RESET_GAME && isActive) {
             restartTimer()
             return;
 
@@ -45,6 +45,7 @@ const Timer = () => {
             stop()
             return;
         }
+        // eslint-disable-next-line
     }, [gameContext])
 
     /**

@@ -21,7 +21,7 @@ const InputReset = () => {
     }
 
     useEffect(() => {
-      if(gameContext.state.status=== FAILED ){
+      if(gameContext.state.status=== FAILED ||  gameContext.state.status=== SUCCESS ){
         resetInput()
       }
     }, [gameContext])
@@ -34,7 +34,7 @@ const InputReset = () => {
             return;
         }
         //incase of wrong character input
-        if (value[value.length - 1] != gameContext.state.letter) {
+        if (value[value.length - 1] !== gameContext.state.letter) {
             gameContext.dispatch({
                 type: ADD_PENALTY
             })

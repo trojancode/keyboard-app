@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect,useState } from "react";
 
 type UseTimeReturnType = [number,boolean,Function,Function,Function,Function]
 
