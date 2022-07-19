@@ -67,7 +67,7 @@ const InputReset = () => {
 
     return (
         <div className="justify-center text-center mt-10 flex text-sm">
-            <input onChange={handleInput} ref={inputRef} type="text" className=' uppercase w-full max-w-sm py-1 px-3 outline-none text-center font-bold bg-warmWhite placeholder:text-center  text-black placeholder:text-gray-600 ' placeholder='Type here..!' />
+            <input onChange={handleInput} ref={inputRef} type="text" className=' uppercase w-full max-w-sm py-1 px-3 outline-none text-center font-bold bg-warmWhite placeholder:text-center  text-black placeholder:text-gray-400 ' placeholder='Type here..!' />
             <button className=' font-bold py-2 px-4 bg-rose-500 text-white' onClick={handleResetButton}>Reset</button>
         </div>
     )
