@@ -1,15 +1,17 @@
 import { createContext, useContext, useReducer } from "react"
 import { getTimeFromLocal } from "../handler";
+import { ADD_PENALTY, FAILED_GAME, FINISH_GAME, NEXT_ALPHA, RESET_GAME, START_GAME, SUCCESS_GAME } from "./actionTypes";
+import { FAILED, FINISHED, IDLE, STARTED, SUCCESS } from "./statusTypes";
 
 type ActionTypes = 'start' | 'next_alpha' | 'penalty' | 'reset' | 'success' | 'finish' | 'failed' | undefined;
-type Action =  {
+type Action = {
     type: ActionTypes
     value?: {
         letter: string
     } | undefined | null
 }
 type Dispatch = (action: Action) => void
-type Status =  'success' | 'idle' | 'start' | 'finish' | 'failed'
+type Status = 'success' | 'idle' | 'started' | 'finished' | 'failed'
 type State = {
     minTime: number,//in milliseconds
     letter: string | undefined,
@@ -27,16 +29,16 @@ const getRandomChar = () => {
 
 const gameReducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case 'start': {
+        case  START_GAME: {
             return {
                 minTime: state.minTime,
                 letterCount: 1,
                 letter: getRandomChar(),
-                status: 'start',
+                status: STARTED,
                 action: action.type,
             }
         }
-        case 'next_alpha': {
+        case NEXT_ALPHA: {
             return {
                 minTime: state.minTime,
                 letter: getRandomChar(),
@@ -46,49 +48,49 @@ const gameReducer = (state: State, action: Action): State => {
 
             }
         }
-        case 'reset': {
+        case RESET_GAME: {
             return {
                 minTime: state.minTime,
                 letter: getRandomChar(),
-                status: 'idle',
+                status: IDLE,
                 action: action.type,
                 letterCount: 0,
             }
         }
-        case 'penalty': {
+        case ADD_PENALTY: {
             return {
                 minTime: state.minTime,
                 letter: state.letter,
-                status: 'start',
+                status: STARTED,
                 action: action.type,
                 letterCount: state.letterCount,
 
             }
         }
-        case 'finish': {
-            return {
-                minTime: state.minTime,                
-                letter: state.letter,
-                status: 'finish',
-                action: action.type,
-                letterCount: 0,
-            }
-        }
-        case 'success': {
-            let mintime = getTimeFromLocal()
-            return {
-                minTime: mintime,                
-                letter: state.letter,
-                status: 'success',
-                action: action.type,
-                letterCount: 0,
-            }
-        }
-        case 'failed': {
+        case FINISH_GAME: {
             return {
                 minTime: state.minTime,
                 letter: state.letter,
-                status: 'failed',
+                status: FINISHED,
+                action: action.type,
+                letterCount: 0,
+            }
+        }
+        case SUCCESS_GAME: {
+            let mintime = getTimeFromLocal()
+            return {
+                minTime: mintime,
+                letter: state.letter,
+                status: SUCCESS,
+                action: action.type,
+                letterCount: 0,
+            }
+        }
+        case FAILED_GAME: {
+            return {
+                minTime: state.minTime,
+                letter: state.letter,
+                status: FAILED,
                 action: action.type,
                 letterCount: 0,
             }
@@ -103,7 +105,7 @@ const GameProvider = ({ children }: GameProviderProps) => {
     const [state, dispatch] = useReducer(gameReducer, {
         minTime: getTimeFromLocal(),
         letter: getRandomChar(),
-        status: 'idle',
+        status: IDLE,
         action: undefined,
         letterCount: 0,
     })
@@ -113,7 +115,7 @@ const GameProvider = ({ children }: GameProviderProps) => {
         </GameContext.Provider>
     )
 }
-const useGameContext = ():{state:State,dispatch:Dispatch} => {
+const useGameContext = (): { state: State, dispatch: Dispatch } => {
     const context = useContext(GameContext)
     if (context === undefined) {
         throw new Error('useGameContext must be used within a GameProvider')
@@ -122,5 +124,5 @@ const useGameContext = ():{state:State,dispatch:Dispatch} => {
 }
 
 export { GameProvider, useGameContext };
-export type { ActionTypes,Action };
+export type { ActionTypes, Action };
 

@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 
 type UseTimeReturnType = [number,boolean,Function,Function,Function,Function]
 
+/**
+ * creates  a timer hook with adding penalty option.
+ * @returns {UseTimeReturnType}
+ */
 const useTimer = ():UseTimeReturnType => {
     
     const [isActive, setIsActive] = useState(false);

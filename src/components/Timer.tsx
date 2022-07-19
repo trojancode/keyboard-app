@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import {  useGameContext } from '../Context/GameContext'
+import { ADD_PENALTY, FAILED_GAME, RESET_GAME, SUCCESS_GAME } from '../Context/actionTypes';
+import { useGameContext } from '../Context/GameContext'
+import { FINISHED, STARTED } from '../Context/statusTypes';
 import { getTimeFromLocal, saveTimeToLocal } from '../handler';
 import { useTimer } from '../hooks';
 
@@ -8,33 +10,40 @@ const Timer = () => {
     let gameContext = useGameContext();
     const [time, isActive, startTimer, stop, restartTimer, addPenalty] = useTimer();
     useEffect(() => {
-        if (gameContext.state.status == "start" && gameContext.state.action == "penalty") {
-            console.log("Penalty");
+        //when ADD_PENALTY is dispatched 
+        if (gameContext.state.status == STARTED && gameContext.state.action == ADD_PENALTY) {
             if (!isActive) startTimer()
             addPenalty()
+            return;
         }
-        if (gameContext.state.status == "start" && !isActive) {
-            console.log("timer start", isActive);
+        //When Game Starts
+        if (gameContext.state.status == STARTED && !isActive) {
             startTimer()
+            return;
         }
-        if (gameContext.state.action == "reset" && isActive) {
+        //When Game is running and resets
+        if (gameContext.state.action == RESET_GAME && isActive) {
             restartTimer()
+            return;
+
         }
-        if (gameContext.state.status === "finish" && isActive) {
-            console.log("timer end");
+        //when FINISH_GAME is dispatched
+        if (gameContext.state.status === FINISHED && isActive) {
             let localMinTime = getTimeFromLocal();
             if (localMinTime === 0 || time < localMinTime) {
+                //game success
                 saveTimeToLocal(time)
                 gameContext.dispatch({
-                    type: "success"
+                    type: SUCCESS_GAME
                 })
             } else {
-                console.log("game failed");
+                //game failed
                 gameContext.dispatch({
-                    type: "failed"
+                    type: FAILED_GAME
                 })
             }
             stop()
+            return;
         }
     }, [gameContext])
 

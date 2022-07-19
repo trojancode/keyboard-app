@@ -10,12 +10,10 @@ import GameLayout from './Layouts/GameLayout';
 const App = () => {
   return (
     <GameLayout>
-
       <Heading></Heading>
       <TextScreen></TextScreen>
       <Timer></Timer>
       <InputReset></InputReset>
-
     </GameLayout>
   );
 }

@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useEffect, useRef } from 'react'
+import { ADD_PENALTY, FINISH_GAME, NEXT_ALPHA, RESET_GAME, START_GAME } from '../Context/actionTypes'
 import { useGameContext } from '../Context/GameContext'
+import { FAILED, SUCCESS } from '../Context/statusTypes'
 
 const InputReset = () => {
     let inputRef = useRef(null)
-
     let gameContext = useGameContext()
     const handleResetButton = (e: any) => {
         gameContext.dispatch({
-            type: 'reset'
+            type: RESET_GAME
         })
         resetInput()
-        
     }
 
     const resetInput=()=>{
@@ -21,7 +21,7 @@ const InputReset = () => {
     }
 
     useEffect(() => {
-      if(gameContext.state.status=== "finish" ){
+      if(gameContext.state.status=== FAILED ){
         resetInput()
       }
     }, [gameContext])
@@ -30,13 +30,13 @@ const InputReset = () => {
     const handleInput =async (e: ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value.toUpperCase()
         //prevent input after success or failer. user need to reset to play again.
-        if(gameContext.state.status==="success"||gameContext.state.status==="failed"){
+        if(gameContext.state.status===SUCCESS||gameContext.state.status===FAILED){
             return;
         }
         //incase of wrong character input
         if (value[value.length - 1] != gameContext.state.letter) {
             gameContext.dispatch({
-                type: 'penalty'
+                type: ADD_PENALTY
             })
             return;
         }
@@ -44,20 +44,20 @@ const InputReset = () => {
         //incase of finish
         if (value[value.length - 1] === gameContext.state.letter && gameContext.state.letterCount > 18) {
             gameContext.dispatch({
-                type:"finish"
+                type:FINISH_GAME
             })
         }
-        //starting on input 
+        //starting  
         if (value.length === 1) {
             gameContext.dispatch({
-                type: 'start',
+                type: START_GAME,
                 value: {
                     letter: value[0]
                 }
             })
         } else if (value.length > 1) {
             gameContext.dispatch({
-                type: 'next_alpha',
+                type: NEXT_ALPHA,
                 value: {
                     letter: value[value.length - 1]
                 }
