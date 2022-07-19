@@ -1,5 +1,5 @@
-import { createContext, useContext, useReducer, useState } from "react"
-import storageHandler from "../handler/storageHandler";
+import { createContext, useContext, useReducer } from "react"
+import { getTimeFromLocal } from "../handler";
 
 type ActionTypes = 'start' | 'next_alpha' | 'penalty' | 'reset' | 'success' | 'finish' | 'failed' | undefined;
 type Action =  {
@@ -75,7 +75,7 @@ const gameReducer = (state: State, action: Action): State => {
             }
         }
         case 'success': {
-            let mintime = storageHandler.getTimeFromLocal()
+            let mintime = getTimeFromLocal()
             return {
                 minTime: mintime,                
                 letter: state.letter,
@@ -101,7 +101,7 @@ const gameReducer = (state: State, action: Action): State => {
 
 const GameProvider = ({ children }: GameProviderProps) => {
     const [state, dispatch] = useReducer(gameReducer, {
-        minTime: storageHandler.getTimeFromLocal(),
+        minTime: getTimeFromLocal(),
         letter: getRandomChar(),
         status: 'idle',
         action: undefined,

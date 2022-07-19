@@ -14,7 +14,7 @@ const getTimeFromLocal = ():number => {
     return 0;
 }
 
-export default {
+export  {
     saveTimeToLocal,
     getTimeFromLocal
 };

@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { Action, useGameContext } from '../Context/GameContext'
-import storageHandler from '../handler/storageHandler';
-import useTimer from '../hooks/useTimer';
+import React, { useEffect } from 'react'
+import {  useGameContext } from '../Context/GameContext'
+import { getTimeFromLocal, saveTimeToLocal } from '../handler';
+import { useTimer } from '../hooks';
+
 
 const Timer = () => {
     let gameContext = useGameContext();
@@ -21,9 +22,9 @@ const Timer = () => {
         }
         if (gameContext.state.status === "finish" && isActive) {
             console.log("timer end");
-            let localMinTime = storageHandler.getTimeFromLocal();
+            let localMinTime = getTimeFromLocal();
             if (localMinTime === 0 || time < localMinTime) {
-                storageHandler.saveTimeToLocal(time)
+                saveTimeToLocal(time)
                 gameContext.dispatch({
                     type: "success"
                 })
@@ -37,6 +38,10 @@ const Timer = () => {
         }
     }, [gameContext])
 
+    /**
+     * @param time time in milliseconds
+     * @returns Formatted time as string `%min% %sec%.%ms% s`
+     */
     const formatTime = (time: number) => {
         let _ft = {
             ms: Math.floor((time % 1000) / 10),
