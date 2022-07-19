@@ -2,11 +2,11 @@ import { createContext, useContext, useReducer, useState } from "react"
 import storageHandler from "../handler/storageHandler";
 
 type ActionTypes = 'start' | 'next_alpha' | 'penalty' | 'reset' | 'success' | 'finish' | 'failed' | undefined;
-interface Action {
+type Action =  {
     type: ActionTypes
-    value: {
+    value?: {
         letter: string
-    } | undefined
+    } | undefined | null
 }
 type Dispatch = (action: Action) => void
 type Status =  'success' | 'idle' | 'start' | 'finish' | 'failed'
@@ -113,7 +113,7 @@ const GameProvider = ({ children }: GameProviderProps) => {
         </GameContext.Provider>
     )
 }
-const useGameContext = () => {
+const useGameContext = ():{state:State,dispatch:Dispatch} => {
     const context = useContext(GameContext)
     if (context === undefined) {
         throw new Error('useGameContext must be used within a GameProvider')

@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { useGameContext } from '../Context/GameContext'
+import { Action, useGameContext } from '../Context/GameContext'
 import storageHandler from '../handler/storageHandler';
 import useTimer from '../hooks/useTimer';
 
 const Timer = () => {
     let gameContext = useGameContext();
-    const [time,isActive,startTimer,stop,restartTimer,addPenalty] = useTimer();
+    const [time, isActive, startTimer, stop, restartTimer, addPenalty] = useTimer();
     useEffect(() => {
         if (gameContext.state.status == "start" && gameContext.state.action == "penalty") {
             console.log("Penalty");
@@ -20,17 +20,17 @@ const Timer = () => {
             restartTimer()
         }
         if (gameContext.state.status === "finish" && isActive) {
-            console.log("timer end" );
+            console.log("timer end");
             let localMinTime = storageHandler.getTimeFromLocal();
-            if(localMinTime ===0 || time<localMinTime){
+            if (localMinTime === 0 || time < localMinTime) {
                 storageHandler.saveTimeToLocal(time)
                 gameContext.dispatch({
-                    type:"success"
+                    type: "success"
                 })
-            }else{
+            } else {
                 console.log("game failed");
                 gameContext.dispatch({
-                    type:'failed'
+                    type: "failed"
                 })
             }
             stop()
