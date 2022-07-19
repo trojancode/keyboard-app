@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 
 type UseTimeReturnType = [number,boolean,Function,Function,Function,Function]
-
+const PENALTY_TIME = 500;
 /**
  * creates  a timer hook with adding penalty option.
  * @returns {UseTimeReturnType}
@@ -43,7 +43,7 @@ const useTimer = ():UseTimeReturnType => {
         setTime(0);
     };
     const addPenalty = () => {
-        setTime(time => time + 5000);
+        setTime(time => time + PENALTY_TIME);
     };
 
     return [time,isActive,startTimer,stop,restartTimer,addPenalty]
